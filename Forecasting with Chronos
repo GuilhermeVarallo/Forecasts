@@ -13,8 +13,8 @@ pipeline = ChronosPipeline.from_pretrained(
   device_map="cuda",
   torch_dtype=torch.bfloat16,
 )
-
-df = pd.read_xlsx("Novos Beneficiários Julho.xlsx")
+nome_do_arquivo = ''
+df = pd.read_xlsx(nome_do_arquivo)
 
 # context must be either a 1D tensor, a list of 1D tensors,
 # or a left-padded 2D tensor with batch as the first dimension
