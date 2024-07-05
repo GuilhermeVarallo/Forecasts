@@ -1,5 +1,5 @@
 #Chronos Forecasting é um modelo de previsão de séries temporais baseado na arquitetura de modelos de linguagem. Treinado com 890 mil datasets, 84 bilhões de observações e 710 milhões de parâmetros em sua versão large.
-
+# O paper referente ao Chronos pode ser encontrado no link a seguir: https://arxiv.org/abs/2403.07815
 pip install git+https://github.com/amazon-science/chronos-forecasting.git
 
 import matplotlib.pyplot as plt
