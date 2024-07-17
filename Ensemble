@@ -1,0 +1,61 @@
+
+import pandas as pd
+import numpy as np
+
+df = pd.read_excel('Inclusoes.xlsx', index_col = 'Data', parse_dates = True)
+df.head()
+
+dataset = df.cnt.rename('y')
+dataset.head()
+
+dataset = dataset.asfreq('M', method='pad')
+dataset.plot(figsize=(6,7), legend = True)
+
+training_set = data.iloc[:-1]
+training_set.tail()
+
+test_set = pd.DataFrame({'Data': [data.index[-1]], 'y': data.iloc[-1]})
+test_set['Data'] = pd.to_datetime(test_set['Data'])
+test_set = test_set.set_index('Data')
+test_set.head()
+
+training_set = pd.DataFrame(training_set)
+training_set.head()
+
+%cd colocar o diretório onde estão salvos os arquivos com as previsões dos distintos modelos
+
+hw = pd.read_csv('predictions_hw.csv',index_col=[0],parse_dates=True)
+tbats = pd.read_csv('predictions_tbats.csv',index_col=[0],parse_dates=True)
+sarimax = pd.read_csv('predictions_sarimax.csv',index_col=[0],parse_dates=True)
+tfp = pd.read_csv('predictions_tfp.csv',index_col=[0],parse_dates=True)
+prophet_tuned = pd.read_csv('predictions_prophet_tuned.csv',index_col=[0],parse_dates=True)
+xgboost = pd.read_csv('predictions_xgb.csv',index_col=[0],parse_dates=True)
+
+df = pd.concat([test_set,hw,tbats,sarimax,tfp,prophet_tuned,xgboost], axis=1)
+
+df['ensemble'] = df.iloc[:,1:].mean(axis=1)
+df.head()
+
+df.y.plot(figsize=(6,7), legend = True)
+df.xgboost.plot(figsize=(6,7), legend = True)
+df.prophet_tuned.plot(figsize=(6,7), legend = True)
+df.tfp.plot(figsize=(6,7), legend = True)
+df.sarimax.plot(figsize=(6,7), legend = True)
+df.tbats.plot(figsize=(6,7), legend = True)
+df.ensemble.plot(figsize=(6,7), legend = True)
+
+# or
+
+df.plot(figsize=(6,7), legend = True)
+
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+round(mean_absolute_error(df.y, df.ensemble), 2)
+
+round(np.sqrt(mean_squared_error(df.y, df.ensemble)),2)
+
+def MAPE(y_true, y_pred):
+    y_true, y_pred = np.array(y_true), np.array(y_pred)
+    return np.mean(np.abs((y_true - y_pred)/y_true)) * 100
+
+MAPE(df.y, df.ensemble)
+
